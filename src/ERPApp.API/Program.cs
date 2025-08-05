@@ -2,6 +2,7 @@
 using Auth.Infrastructure;
 using Auth.Infrastructure.Extensions;
 using ERApp.API.Extensions;
+using ERPApp.Shared.Interfaces;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -22,6 +23,18 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+var installers = AppDomain.CurrentDomain
+    .GetAssemblies()
+    .SelectMany(assembly => assembly.GetTypes())
+    .Where(type => typeof(IServiceInstaller).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface)
+    .Select(Activator.CreateInstance)
+    .Cast<IServiceInstaller>();
+
+foreach (var installer in installers)
+{
+    installer.InstallServices(builder.Services, builder.Configuration);
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin",
@@ -35,7 +48,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddModuleDbContext<AuthDbContext>(builder.Configuration);
-builder.Services.AddAuthServices(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddMemoryCache();
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
