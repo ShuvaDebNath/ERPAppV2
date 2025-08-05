@@ -1,6 +1,7 @@
 ﻿using Auth.Application.Interfaces;
 using Auth.Domain.Entities;
 using Auth.Infrastructure.Services;
+using ERPApp.Shared.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,18 +9,20 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.Text;
 
 namespace Auth.Infrastructure.Extensions;
 
-public static class ServiceCollectionExtensions
+public class AuthServiceInstaller : IServiceInstaller
 {
-    public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration config)
+    public void InstallServices(IServiceCollection services, IConfiguration config)
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserPermissionService, UserPermissionService>();
         services.AddScoped<IPasswordHasher<AspNetUser>, PasswordHasher<AspNetUser>>();
 
+        #region Model State Error Handle
         services.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = context =>
@@ -46,6 +49,10 @@ public static class ServiceCollectionExtensions
             };
         });
 
+        #endregion
+
+        #region JWT
+
         var jwtSettings = config.GetSection("Jwt");
         services.AddAuthentication(options =>
         {
@@ -66,6 +73,6 @@ public static class ServiceCollectionExtensions
             };
         });
 
-        return services;
+        #endregion
     }
 }
