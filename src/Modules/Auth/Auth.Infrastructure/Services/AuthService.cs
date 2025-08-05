@@ -1,7 +1,7 @@
 ﻿using Auth.Application.DTOs;
 using Auth.Application.Interfaces;
 using Auth.Domain.Entities;
-using ERPApp.Shared.Helpers;
+using ERPApp.Shared.Abstractions.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,11 +12,16 @@ using System.Text;
 
 namespace Auth.Infrastructure.Services;
 
-public class AuthService(AuthDbContext context, IConfiguration config, IPasswordHasher<AspNetUser> passwordHasher) : IAuthService
+public class AuthService(
+    AuthDbContext context, 
+    IConfiguration config, 
+    IPasswordHasher<AspNetUser> passwordHasher,
+    IPasswordHasherService _hasher) : IAuthService
 {
     private readonly AuthDbContext _context = context;
     private readonly IConfiguration _config = config;
     private readonly IPasswordHasher<AspNetUser> _passwordHasher = passwordHasher;
+    private readonly IPasswordHasherService _hasher = _hasher;
 
     public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
     {
@@ -38,7 +43,7 @@ public class AuthService(AuthDbContext context, IConfiguration config, IPassword
         else
         {
             // 2. Fallback to old SHA256
-            var legacyHash = HelperExtention.Hash(request.Password);
+            var legacyHash = _hasher.Sha256Hash(request.Password);
             if (legacyHash == user.PasswordHash)
             {
                 isPasswordValid = true;
