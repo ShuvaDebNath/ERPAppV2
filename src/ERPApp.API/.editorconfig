@@ -1,0 +1,71 @@
+############################
+# Naming Styles
+############################
+
+# PascalCase style
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+dotnet_naming_style.pascal_case_style.required_prefix =
+dotnet_naming_style.pascal_case_style.required_suffix =
+dotnet_naming_style.pascal_case_style.name = pascal_case_style
+
+# _camelCase for private readonly fields
+dotnet_naming_style.underscore_prefix_style.required_prefix = _
+dotnet_naming_style.underscore_prefix_style.capitalization = camel_case
+dotnet_naming_style.underscore_prefix_style.required_suffix =
+dotnet_naming_style.underscore_prefix_style.name = underscore_prefix_style
+
+# Ends with Async for async methods
+dotnet_naming_style.end_with_async_style.required_suffix = Async
+dotnet_naming_style.end_with_async_style.required_prefix =
+dotnet_naming_style.end_with_async_style.capitalization = pascal_case
+dotnet_naming_style.end_with_async_style.name = end_with_async_style
+
+############################
+# Symbol Specifications
+############################
+
+# Private readonly fields
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers = readonly
+dotnet_naming_symbols.private_fields.name = private_fields
+
+# Constants
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_symbols.constants.name = constants
+
+# Async methods
+dotnet_naming_symbols.async_methods.applicable_kinds = method
+dotnet_naming_symbols.async_methods.applicable_accessibilities = *
+dotnet_naming_symbols.async_methods.required_modifiers = async
+dotnet_naming_symbols.async_methods.name = async_methods
+
+# Enums
+dotnet_naming_symbols.enums.applicable_kinds = enum
+dotnet_naming_symbols.enums.name = enums
+
+############################
+# Naming Rules
+############################
+
+# Rule: private readonly fields must use _camelCase
+dotnet_naming_rule.private_fields_with_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_with_underscore.style = underscore_prefix_style
+dotnet_naming_rule.private_fields_with_underscore.severity = warning
+
+# Rule: constants must use PascalCase
+dotnet_naming_rule.constants_pascal_case.symbols = constants
+dotnet_naming_rule.constants_pascal_case.style = pascal_case_style
+dotnet_naming_rule.constants_pascal_case.severity = warning
+
+# Rule: async methods must end with Async
+dotnet_naming_rule.async_methods_should_end_with_async.symbols = async_methods
+dotnet_naming_rule.async_methods_should_end_with_async.style = end_with_async_style
+dotnet_naming_rule.async_methods_should_end_with_async.severity = warning
+
+# Rule: enums must use PascalCase
+dotnet_naming_rule.enums_pascal_case.symbols = enums
+dotnet_naming_rule.enums_pascal_case.style = pascal_case_style
+dotnet_naming_rule.enums_pascal_case.severity = warning

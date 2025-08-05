@@ -1,0 +1,9 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors>CS8618;CS8602</WarningsAsErrors>
+    <!-- Nullable reference warnings -->
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

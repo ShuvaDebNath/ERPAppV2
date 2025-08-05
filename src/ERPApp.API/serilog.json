@@ -1,0 +1,45 @@
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Warning",
+      "Override": {
+        "Microsoft": "Warning",
+        "System": "Warning"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Console"
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/errors/log-.log",
+          "rollingInterval": "Day",
+          "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message}{NewLine}{Exception}",
+          "restrictedToMinimumLevel": "Error"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/rate-limit/log-.log",
+          "rollingInterval": "Day",
+          "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message}{NewLine}",
+          "restrictedToMinimumLevel": "Warning"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/app-log/log-.log",
+          "rollingInterval": "Day",
+          "shared": true,
+          "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message}{NewLine}",
+          "restrictedToMinimumLevel": "Warning"
+        }
+      }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
+  }
+}
